@@ -5,6 +5,18 @@ class My_Model_UserStatus {
 	const STATUS_IDLE = 0;
 	const LEVEL_FINISH = -1;
 
+	public static function init($userId) {
+		$res = My_Model_Base::getInstance()->query(
+				'INSERT INTO `user_status` (`user_id`) VALUES (:user_id)',
+				array(
+					':user_id' => $userId, 
+				     )
+				);
+		return !$res || $res->rowCount()
+			? true
+			: false;
+	}
+
 	public static function startPlay($weiboId, $timestamp) {
 		$res = My_Model_Base::getInstance()->query(
 				'INSERT INTO `user_status` (`weibo_id`, `status`, `level_time`) VALUES (:weibo_id, :status, :level_time) ON DUPLICATE KEY UPDATE `weibo_id`=:weibo_id, `level_time` = :level_time, `status` = :status',

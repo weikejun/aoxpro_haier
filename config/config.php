@@ -2,14 +2,56 @@
 $gConfig = array();
 
 $gConfig['db'] = array(
-		'dsn' => 'mysql:host=localhost;dbname=aoxpro_zcgd;charset=utf8',
+		'dsn' => 'mysql:host=localhost;dbname=aoxpro_haier;charset=utf8',
 		'user' => 'root',
 		'pass' => 'root',
 		);
 
 $gConfig['game'] = array(
-		'total_time' => 6,
-		'max_level' => 2,
+		'lv_conf' => array(
+			0 => array(
+				'time' => 30,
+				'monster' => 10,
+				'm_score' => 100,
+				'boss' => 0,
+				'b_score' => 0,
+				),
+			1 => array(
+				'time' => 40,
+				'monster' => 15,
+				'm_score' => 100,
+				'boss' => 0,
+				'b_score' => 0,
+				),
+			2 => array(
+				'time' => 50,
+				'monster' => 20,
+				'm_score' => 100,
+				'boss' => 0,
+				'b_score' => 0,
+				),
+			3 => array(
+				'time' => 60,
+				'monster' => 25,
+				'm_score' => 100,
+				'boss' => 0,
+				'b_score' => 0,
+				),
+			4 => array(
+				'time' => 70,
+				'monster' => 30,
+				'm_score' => 100,
+				'boss' => 0,
+				'b_score' => 0,
+				),
+			5 => array(
+				'time' => 90,
+				'monster' => 30,
+				'm_score' => 100,
+				'boss' => 1,
+				'b_score' => 10000,
+				),
+			),
 		);
 
 $gConfig['share'] = array(

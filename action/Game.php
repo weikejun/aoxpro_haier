@@ -11,27 +11,109 @@ class My_Action_Game extends My_Action_Abstract {
 
 	protected $_isAuth = false;
 
+	private function _doLogin($user) {
+		$_SESSION['auth']['user'] = $user;
+	}
 
 	public function loginAction() {
-		$ret = null;
-		try {
-			$ret = My_Model_User::insertUpdate(
-					$this->_weiboUser['id'], 
-					$this->_weiboUser['name'],
-					$this->getActionTime()
-					);
-			if (!$ret) {
-				throw new Exception('update user error');
-			}
-			My_Model_UserStatus::deleteByWeiboId($this->_weiboUser['id']);
-		} catch (Exception $e) {
-			$this->_exception = $e;
-		}
-
-		$this->setViewParams(
-				'data', 
-				array('success' => !empty($ret) ? 1 : 0)
+		$retData = array(
+				'code' => 1,
+				'msg' => '登录成功',
 				);
+		try {
+			if(strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+				if(My_Service_Validator::notEmpty(trim($this->getRequest('name'))) === false) {
+					throw new Exception('用户名不能为空');
+				}
+				if(My_Service_Validator::notEmpty($this->getRequest('password')) === false) {
+					throw new Exception('密码不能为空');
+				}
+				$user = My_Model_User::getByName(trim($this->getRequest('name')));
+				if($user === false) {
+					throw new Exception('服务器出错，请稍等再试');
+				} elseif(empty($user)) {
+					throw new Exception('用户名不存在');
+				}
+				if(My_Model_User::genPassword($this->getRequest('password')) !== $user[0]['password']) {
+					throw new Exception('密码不正确');
+				}
+				$this->_doLogin($user);
+			} else {
+				throw new Exception('用户请求出错');
+			}
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
+//		$ret = null;
+//		try {
+//			$ret = My_Model_User::insertUpdate(
+//					$this->_weiboUser['id'], 
+//					$this->_weiboUser['name'],
+//					$this->getActionTime()
+//					);
+//			if (!$ret) {
+//				throw new Exception('update user error');
+//			}
+//			My_Model_UserStatus::deleteByWeiboId($this->_weiboUser['id']);
+//		} catch (Exception $e) {
+//			$this->_exception = $e;
+//		}
+//
+//		$this->setViewParams(
+//				'data', 
+//				array('success' => !empty($ret) ? 1 : 0)
+//				);
+	}
+
+	public function regAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '注册成功',
+				);
+		try {
+			if(strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+				if(My_Service_Validator::notEmpty(trim($this->getRequest('name'))) === false) {
+					throw new Exception('用户名不能为空');
+				}
+				$user = My_Model_User::getByName(trim($this->getrequest('name')));
+				if($user === false) {
+					throw new Exception('服务器出错，请稍等再试');
+				} elseif(!empty($user)) {
+					throw new Exception('用户名已存在，请您更换用户名');
+				}
+				if(My_Service_Validator::notEmpty($this->getRequest('password')) === false) {
+					throw new Exception('密码不能为空');
+				}
+				if(My_Service_Validator::notEmpty(trim($this->getRequest('phone'))) === false) {
+					throw new Exception('手机号不能为空');
+				}
+				if(My_Service_Validator::notEmpty(trim($this->getRequest('email'))) === false) {
+					throw new Exception('email不能为空');
+				}
+				$ret = My_Model_User::addUser(
+						$this->getRequest('name'),
+						$this->getRequest('password'),
+						$this->getRequest('phone'),
+						$this->getRequest('email')
+						);
+				if(!$ret) {
+					throw new Exception('服务器出错，请稍等再试');
+				} 
+				$user = My_Model_User::getByName(trim($this->getrequest('name')));
+				if(empty($user)) {
+					throw new Exception('服务器出错，请稍等再试');
+				}
+				$this->_doLogin($user);
+			} else {
+				throw new Exception('用户请求出错');
+			}
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
 	}
 
 	public function logoutAction() {
@@ -41,100 +123,105 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	public function infoAction() {
-		$user = null;
-		try {
-			$user = My_Model_User::getByWeiboId($this->_weiboUser['id']);
-			if(empty($user)) {
-				throw new Exception('get user error');
-			}
-		} catch (Exception $e) {
-			$this->_exception = $e;
-		}
+		$retData = array(
+				'code' => 1,
+				'msg' => '返回成功',
+				);
+		$retData['name'] = $_SESSION['auth']['user'][0]['name'];
+		$retData['total_score'] = $_SESSION['auth']['user'][0]['total_score'];
+		$retData['level'] = $_SESSION['auth']['user'][0]['level'];
 
-		$this->setViewParams('data', array(
-					'success' => !empty($user) ? 1 : 0,
-					'weibo_name' => !empty($user) ? $user[0]->weibo_name : ''
-					));
+		$this->setViewParams('data', $retData);
 	}
 
 	public function playAction() {
-		$conn = My_Model_Base::getInstance()->getConnection();
+		$retData = array(
+				'code' => 1,
+				'msg' => '游戏开始',
+				);
 		try {
-			$conn->beginTransaction();
-			$user = My_Model_User::getByWeiboId($this->_weiboUser['id']);
-			if(empty($user)) {
-				throw new Exception('get user error');
+			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+				$level = $this->getRequest('level');
+				$user = $this->getSession('auth')['user'];
+				if(empty($level) && intval($level) !== 0) {
+					$level = $user[0]['level'];
+				}
+				if($level > $user[0]['level']) {
+					throw new Exception('用户关卡选择出错');
+				}
+				$_SESSION['play']['start_time'] = time();
+				$_SESSION['play']['status'] = 1;
+				$_SESSION['play']['level'] = $level;
+				$gameConfig = ConfigLoader::getInstance()->get('game');
+				$retData['lv_conf'] = $gameConfig['lv_conf'][$level];
+				$retData['total_score'] = $user[0]['total_score'];
+				$retData['level'] = $level;
+			} else {
+				throw new Exception('用户请求出错');
 			}
-			$ret = My_Model_UserStatus::startPlay(
-					$this->_weiboUser['id'], 
-					$this->getActionTime()
-					);
-			if(empty($ret)) {
-				throw new Exception('update user status error');
-			}
-			$status = My_Model_UserStatus::getByWeiboId($this->_weiboUser['id']);
-
-			$conn->commit();
 		} catch (Exception $e) {
-			$this->_exception = $e;
-			$conn->rollBack();
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+
 		}
 
-		$this->setViewParams('data', array(
-					'success' => !empty($status) ? 1 : 0,
-					'level' => !empty($status) ? $status[0]->level : 0,
-					'total_score' => !empty($status) ? $status[0]->total_score : 0,
-					));
+		$this->setViewParams('data', $retData);
 	}
 
 	public function passAction() {
-		$status = null;
-
-		$conn = My_Model_Base::getInstance()->getConnection();
+		$retData = array(
+				'code' => 1,
+				'msg' => '游戏完成',
+				);
 		try {
-			$conn->beginTransaction();
-			$status = My_Model_UserStatus::getByWeiboId($this->_weiboUser['id']);
-			if(empty($status) || empty($status[0])) {
-				throw new Exception('get user status error');
+			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+				if(!isset($_SESSION['play']) || $_SESSION['play']['status'] != 1) {
+					throw new Exception('用户不在游戏中');
+				}
+				$gameConfig = ConfigLoader::getInstance()->get('game');
+				$lvConf = $gameConfig['lv_conf'][$_SESSION['play']['level']];
+				if(time() - $_SESSION['play']['start_time'] < $lvConf['time']) {
+					throw new Exception('用户正在游戏，时间未到');
+				}
+				$score = intval($this->getRequest('score'));
+				if($score > $lvConf['m_score'] * $lvConf['monster']
+						+ $lvConf['b_score'] * $lvConf['boss']) {
+					throw new Exception('用户分数异常');
+				}
+				$pssLv = $_SESSION['auth']['user'][0]['level'];
+				$curLv = $_SESSION['play']['level'];
+				if($curLv < count($gameConfig['lv_conf']) - 1) {
+					$nxtLv = $curLv + 1;
+				} else {
+					$nxtLv = count($gameConfig['lv_conf']) - 1;
+				}
+				if($nxtLv > $pssLv) {
+					$pssLv = $nxtLv;
+				}
+
+				$ret = My_Model_User::passLevel(
+						$_SESSION['auth']['user'][0]['id'],
+						$score = intval($score)+intval($_SESSION['auth']['user'][0]['total_score']), 
+						$pssLv);
+				if(!$ret) {
+					throw new Exception('服务器出错，请稍等再试');
+				}
+				$_SESSION['play']['status'] = 0;
+				$_SESSION['auth']['user'][0]['total_score'] = $score;
+				$_SESSION['auth']['user'][0]['level'] = $pssLv;
+
+				$retData['total_score'] = $score;
+				$retData['level_next'] = $nxtLv;
+				$retData['level_max'] = count($gameConfig['lv_conf']) - 1;
+			} else {
+				throw new Exception('用户请求出错');
 			}
-			if($status[0]->status != My_Model_UserStatus::STATUS_PLAY) {
-				throw new Exception('user not play');
-			}
-			if($this->getActionTime() - $status[0]->level_time < ConfigLoader::getInstance()->get('game', 'total_time')) {
-				throw new Exception('rt error');
-			}
-			$score = intval($this->getRequest('score')); 
-			if(!My_Service_Game::verifyScore($score, $status[0]->level)) {
-				throw new Exception('count score error');
-			}
-			$status[0]->total_score += $score;
-			$status[0]->level += 1;
-			if($status[0]->level > ConfigLoader::getInstance()->get('game', 'max_level')) {
-				$status[0]->level = My_Model_UserStatus::LEVEL_FINISH;
-				$ret = My_Model_QualifiedUser::insertUpdate(
-						$this->_weiboUser['id'],
-						$this->_weiboUser['name'],
-						$this->_weiboUser['passport']
-						);
-			}
-			$status[0]->level_time = $this->getActionTime();
-			$status[0]->status = My_Model_UserStatus::STATUS_IDLE;
-			if(!My_Model_UserStatus::updateUserStatus($status[0])) {
-				throw new Exception('update user status error');
-			}
-			$conn->commit();
 		} catch (Exception $e) {
-			$this->_exception = $e;
-			$status = null;
-			$conn->rollBack();
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
 		}
 
-		$this->setViewParams('data', array(
-					'success' => !empty($status) ? 1 : 0,
-					'level_score' => !empty($status) ? $score : 0,
-					'total_score' => !empty($status) ? $status[0]->total_score : 0,
-					'level_next' => !empty($status) ? $status[0]->level : 0
-					));
+		$this->setViewParams('data', $retData);
 	}
 
 	public function shareAction() {
@@ -401,13 +488,19 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	protected function _preAction() {
-		$unauthActions = array('callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
+		$unauthActions = array('login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
 		if(!in_array($this->getActionName(), $unauthActions)) {
-			$this->_verifyAuth();
-			if (!$this->_isAuth) {
+			$session = $this->getSession('auth');
+			if(!isset($session['user']) || empty($session['user'][0]['id'])) {
 				$this->_actionName = 'unauth';
 			}
 		}
+//		if(!in_array($this->getActionName(), $unauthActions)) {
+//			$this->_verifyAuth();
+//			if (!$this->_isAuth) {
+//				$this->_actionName = 'unauth';
+//			}
+//		}
 	}
 
 	private function _verifyAuth() {
