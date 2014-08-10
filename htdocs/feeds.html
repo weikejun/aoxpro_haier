@@ -1,0 +1,166 @@
+<!doctype html>
+<html xmlns:wb="http://open.weibo.com/wb">
+<head>
+<meta charset="utf-8">
+<title>环保宣言 - 电子银行环保活动日</title>
+<meta name="Keywords" content="中国电子银行,电子银行环保日,2013电子银行环保日,e滴水v环保,电子银行环保卫士大作战" />
+<meta name="Description" content="第二届电子银行环保日，推动全民积极使用电子银行交易，减少碳排放，为环保做贡献，线上活动包含有奖游戏及有奖转发微博，鼓励大众参与，了解电子银行环保日，推动公众对电子银行环保日的关注！" />
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+<script src=http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=2290085142 type="text/javascript" charset="utf-8"></script>
+<script src="http://mat1.gtimg.com/app/openjs/openjs.js#autoboot=no&debug=no"></script>
+<script>
+var $id = function(id) {return document.getElementById(id);}
+var $createE = function(name) {return document.createElement(name);}
+</script>
+</head>
+
+<body>
+
+	<div class="top_nav">
+	    <!--#include virtual="/inc/logo_bar.dwt" -->	
+	</div>
+
+	<div class="main1">
+    	<div class="center bg_1">
+	    <div title="HI，我是中国电子银行网吉祥物小V！我高大上么~" style="border:none; width: 155px; height: 149px; position: absolute; left: 898px; top: 69px; cursor:pointer;z-index:50;"></div>
+	    <!--#include virtual="/inc/navi.dwt" -->	
+            <div class="clear"></div>
+	</div>
+    </div>
+    
+    <div class="content">
+    	<div class="sm">
+    	<img src="img/26.png" alt="" />
+        </div>
+	<a name="share" />
+        <div class="weibo">
+        	<div class="left">
+            	<div class="tab"><a id="s_wb_tab" href="javascript:void 0" class="s"></a><a id="t_wb_tab" href="javascript:void 0" class="t1"></a></div>
+                <div class="weibo_list">
+                	<img src="img/33.jpg" alt=""/ ><br />
+			<div id="s_wb_cont">
+			<div style="height:0;inline-height:0;border-bottom:1px solid #ccc;width:100%;"></div>
+                	<div id="s_wb_cont_scroll" class="weibo_scroll"><span id="s_weibo_loading">加载中</span></div>
+			</div>
+			<div id="t_wb_cont" style="display: none;">
+			<div style="height:0;inline-height:0;border-bottom:1px solid #ccc;width:100%;"></div>
+                	<div id="t_wb_cont_scroll" class="weibo_scroll"><span id="t_weibo_loading">加载中</span></div>
+			</div>
+                </div>
+            </div>
+        	<div class="right">
+				<div class="man"></div>
+                <img src="img/34.jpg" alt=""/ ><br />
+                <textarea id="default_feed" class="textarea" style=" ">
+		</textarea><br />
+		<script>
+			var txt = ["我参加了#e滴水v环保#有奖活动，了解到，每成功使用一次电子银行交易说明将节约大约2克的纸张，意味着保护了10滴天然水免受工业排放污染的危害，我是环保宣传队，我积极使用电子银行，点滴环保从我做起！@中国电子银行网 http://zcgd2014.aoxpro.com/", "我参加了#e滴水v环保#有奖活动，了解到，环保就在身边，使用电子银行交易，环保如此简单，既方便自己又能为环保治水做出贡献，我是环保宣传队，多多使用电子银行，体验环保生活方式！活动奖品多多，大奖可是iphone5S土豪金哟！每天都奖充值卡！ @中国电子银行网 http://zcgd2014.aoxpro.com/", "10.18电子银行环保日就要到了，参加@中国电子银行网#e滴水v环保#有奖活动，大奖iphone5S土豪金呦，奖品多多，每天有的拿，还等什么，猛戳→ → http://zcgd2014.aoxpro.com/"];
+			var rd = Math.floor(Math.random() * 10) % 3; 
+			$id('default_feed').innerHTML = txt[rd];
+		</script>
+		<div>
+			<div id="share_tips" style="position: absolute; padding-top: 10px;">发布到：</div>
+			<div style="position: absolute; left: 135px;" name="wb_publisher" platform="sina" class="button1" ></div>
+			<div style="position: absolute; left: 267px;" name="wb_publisher" platform="tencent" class="button2" ></div>
+			
+			<div style="position: relative; top: 50px; font-weight: bold;"><input id="is_follow" type="checkbox" checked=true>关注@中国电子银行网</div>
+		</div>
+		<script type="text/javascript" src="/scripts/jquery.min.js"></script>
+		<script>
+		$('[name=wb_publisher]').each(function() {
+				var _self = this;
+				$(this).click(function() {
+					$('#share_tips').text('微博发布中，请稍候……');
+					$('[name=wb_publisher]').hide();
+					$.ajax({
+						url: '/index.php?action=share',
+						type: 'POST',
+						data: {
+							'ru': encodeURIComponent(location.href.replace(/#.+$/, '')+"#share"),
+							'platform': $(_self).attr('platform'),
+							'follow': $('#is_follow').attr('checked'),
+							'content': encodeURIComponent($('#default_feed').text()),
+							'pic_url': encodeURIComponent("http://zcgd2014.aoxpro.com/img/share.jpg")
+							},
+						success: function(rData) {
+							if(/success=1/.test(rData)) {
+								$('[name=wb_publisher]').show();
+								$('#share_tips').text('发布到：');
+								alert('发布成功！');
+								location.reload();
+								} else {
+								location.href = '/index.php?action=connect&platform='+$(_self).attr('platform');
+								}
+							}
+						});
+					});
+				});
+		$id('s_wb_tab').onclick = function() {
+			$id('t_wb_tab').setAttribute('class', 't1');
+			$id('t_wb_tab').className = 't1';
+			$id('t_wb_cont').style.display = 'none';
+			$id('s_wb_cont').style.display = 'block';
+			this.setAttribute('class', 's');
+			this.className = 's';
+		}
+		$id('t_wb_tab').onclick = function() {
+			$id('s_wb_tab').setAttribute('class', 's1');
+			$id('s_wb_tab').className = 's1';
+			$id('s_wb_cont').style.display = 'none';
+			$id('t_wb_cont').style.display = 'block';
+			this.setAttribute('class', 't');
+			this.className = 't';
+		}
+		var weiboCount = 10;
+		function getWeibo(platform, pn) {
+			var pl = platform.substr(0, 1);
+			$id(pl+'_weibo_loading').style.display = "none";
+			$.ajax({
+				url: '/index.php?action=topic',
+				data: {
+					platform: platform,
+					count: weiboCount,
+					page: pn
+					},
+				dataType: 'json',
+				success: function(sRes) {
+					//sRes = testWbTopic;
+					var tpl = '<div class="weibo_show"><div class="face"><a href="$url_pre$/$uid$" target="_blank"><img src="$face_pic$" alt="" /></a></div><div class="weibo_content"><a target="_blank" href="$url_pre$/$uid$"><b>$user_name$</b></a>: $weibo_text$</div><div class="weibo_pic"><img src="$weibo_pic$"></div><div class="weibo_time">$weibo_time$</div><div class="clear"></div></div>';
+					var inHtml = '';
+					for(var i in sRes.statuses) {
+						var dObj = new Date(sRes.statuses[i].created_at);
+						var wbTxt = sRes.statuses[i].feeds_detail.replace(/(#[^#]+#)/, function(s1) {return "<a href='http://huati.weibo.com/k/"+encodeURIComponent(s1.replace(/#/g, ''))+"' target=_blank>"+s1+"</a>";});
+						inHtml += tpl
+							.replace(/\$uid\$/g, sRes.statuses[i].weibo_id.replace(/^[st]_/, ''))
+							.replace(/\$url_pre\$/g, pl == 's' ? 'http://weibo.com/u' : 'http://t.qq.com')
+							.replace('$face_pic$', sRes.statuses[i].weibo_face)
+							.replace('$user_name$', sRes.statuses[i].weibo_name)
+							.replace('$weibo_text$', wbTxt)
+							.replace('$weibo_pic$', sRes.statuses[i].feeds_pic ? sRes.statuses[i].feeds_pic : '')
+							.replace('$weibo_time$', sRes.statuses[i].create_time);
+					}
+					$id(pl+'_wb_cont_scroll').innerHTML = $id(pl+'_wb_cont_scroll').innerHTML.replace(/<div[^>]+weibo_more[^>]+>.+<\/div>/g, '');
+					if (pn * weiboCount < sRes.total_number) {
+				       		inHtml += '<div onclick="getWeiboMore(\''+platform+'\', '+sRes.total_number+', '+pn+');" class="weibo_more">查看更多</div>';
+					}
+					$id(pl+'_wb_cont_scroll').innerHTML += inHtml;
+					}
+			});
+		}
+		function getWeiboMore(platform, total, pn) {
+			var count = weiboCount;
+			if(pn * count < total) {
+				getWeibo(platform, pn + 1);
+			} 
+		}
+		getWeibo('sina', 1);
+		getWeibo('tencent', 1);
+		</script>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
+ 
+	<div class="footer"></div>
+</body>
+</html>

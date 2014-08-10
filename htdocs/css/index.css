@@ -1,0 +1,60 @@
+body{font-family:Segoe, "Segoe UI", "DejaVu Sans", "Trebuchet MS", Verdana, sans-serif;font-style:normal;font-weight:normal;font-size:10px;color:#333;}
+body{background:#e9edf0;margin:0px;}
+html{overflow:-moz-scrollbars-vertical;overflow:hidden;overflow-y:scroll;}
+body,html{height:100%;}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td{margin:0;padding:0;}
+img{border:0;}
+li{list-style-type:none;}
+ol,ul{list-style:none;list-style-type:disc;}
+.clear{clear:both;padding:0;margin:0;width:0;height:0;font-size:0px;line-height:0px;}
+a{text-decoration:none;}
+a:hover{text-decoration:underline;}
+
+body{font-family:Gotham,"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:10px;color:#333;background:#d9f7fe;margin:0px;}
+img{border:0;}
+.clear{clear:both;padding:0;margin:0;width:0;height:0;font-size:0px;line-height:0px;}
+.top_nav{width:100%;height:67px;background:#fff;}
+.top_nav .center{width:1100px;margin:0 auto;}
+
+.main_banner{width:100%;height:538px;}
+.main_banner .center{width:1100px;height:538px;margin:0 auto;background:#333;position:relative;}
+.main_banner .left_1{position:absolute;width:192px;height:130px;margin:31px 0 0 31px;z-index:90;}
+.main_banner .right_1{position:absolute;width:262px;height:360px;right:0;margin:0 0 0 0;z-index:90;}
+.main_banner .right_1 a{display:block;}
+
+#banner_1{height:538px;background:url(../img/15.jpg) no-repeat;position:relative;}
+#banner_2{height:538px;background:url(../img/16.jpg) no-repeat;position:relative;display:none;cursor:pointer;}
+
+.main{width:100%;}
+.main .center{width:1100px;margin:0 auto;position:relative;}
+.main .center .num{position:absolute;width:233px;height:43px;background:url(../img/10.png) no-repeat;left:40%;top:15px;color:#fff;font-size:30px;font-weight:bold;text-indent:103px;letter-spacing:3px;z-index:90;}
+.main .center .block_1{float:left;width:280px;height:312px;background:url(../img/07.jpg) no-repeat;font-size:12px;padding:60px 10px 0 70px;line-height:160%;}
+.main .center .block_1 em{color:#f00;font-style:normal;}
+.main .center .block_2{float:left;width:412px;height:372px;background:url(../img/08.jpg) no-repeat;position:relative;}
+.main .center .block_2 .left_a{position:absolute;top:190px;left:20px;display:inline-block;width:40px;height:55px;background:url(../img/13.png) no-repeat;}
+.main .center .block_2 .left_a:hover{left:18px;}
+.main .center .block_2 .right_a{position:absolute;top:190px;right:-6px;display:inline-block;width:40px;height:55px;background:url(../img/12.png) no-repeat;}
+.main .center .block_2 .right_a:hover{right:-8px;}
+.main .center .block_2 .jp{width:335px;height:205px;display:inline-block;margin:125px 0 0 50px;}
+.main .center .block_2 .jp a{display:inline-block;margin:0 2px;}
+.main .center .block_3{float:left;width:298px;height:312px;background:url(../img/09.jpg) no-repeat;font-size:8px;padding:60px 10px 0 10px;line-height:180%;cursor:pointer;}
+.main .center .block_3 .span_1{width:100px;display:inline-block;font-size:9px;}
+.main .center .block_3 .span_2{display:inline-block;width:180px;font-size:9px;}
+.main .center .block_3 .span_2 a{color:#f60;font-size:8px;}
+.main .center .block_3 .txt{margin:10px 30px 10px 0px;font-size:10px;border-top:1px solid #ccc;padding-top:5px;}
+
+.links{width:100%;height:312px;background:url(../img/11.jpg) no-repeat center;}
+.links .center{width:840px;height:312px;margin:0 auto;}
+.links .center a{display:inline-block;float:left;background:#fff;text-align:center;width:106px;height:30px;line-height:30px;margin:4px 6px;border:1px solid #abdaef;}
+.links .center a:hover{ box-shadow:2px 2px 0px #ccc;}
+
+.footer{width:100%;height:54px;background:#0e93d8;font-size:16px;color:#fff;line-height:54px;text-align:center;}
+.hide{display: none;}
+#slider-code { height: 350px; overflow:hidden;}
+#slider-code .viewport { float: left; width: 330px; height: 210px; overflow: hidden; position: relative; cursor: pointer; }
+#slider-code .buttons { display: block; float: left; }
+#slider-code .next {  }
+#slider-code .disable { visibility: hidden; }
+#slider-code .overview { list-style: none; position: absolute; padding: 0; margin: 0; left: 0; top: 0; }
+#slider-code .overview li{ float: left; margin: 0 20px 0 0; padding: 1px; height: 210px; border: none; width: 330px; }
+#slider-code .overview li div{ margin-left: auto;margin-right:auto;font-family: simhei; text-align: center; font-weight: bold; }

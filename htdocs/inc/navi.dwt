@@ -1,0 +1,6 @@
+            <ul class="nav1">
+               <li><a href="/index.html"><img src="/img/nav11.png"></a></li>
+               <li><a href="/index.php?action=game#play"><img src="/img/nav12.png"></a></li>
+               <li><a href="/ten.html"><img src="/img/nav13.png"></a></li>
+               <li><a href="/pass.html"><img src="/img/nav14.png"></a></li>
+            </ul>   
