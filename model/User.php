@@ -80,5 +80,15 @@ class My_Model_User {
 	public static function genPassword($password) {
 		return MD5($password . self::$_pwSalt);
 	}
+
+	public static function getUserOrderByScore($limit, $order = 'DESC') {
+		$res = My_Model_Base::getInstance()->query(
+				'SELECT * FROM `user` ORDER BY `total_score` ' . $order .' LIMIT ' . $limit,
+				array()
+				);
+		return $res
+			? $res->fetchAll(PDO::FETCH_ASSOC)
+			: false;
+	}
 }
 

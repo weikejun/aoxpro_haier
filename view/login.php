@@ -1,2 +1,1 @@
-<?php echo '<?xml encoding="utf-8" ?>'; ?>
-<root code="<?php echo $this->_viewParams['data']['code']; ?>" msg="<?php echo $this->_viewParams['data']['msg']; ?>" />
+<?php echo json_encode($this->_viewParams['data']) ?>

@@ -46,25 +46,61 @@ class My_Action_Game extends My_Action_Abstract {
 			$retData['msg'] = $e->getMessage();
 		}
 		$this->setViewParams('data', $retData);
-//		$ret = null;
-//		try {
-//			$ret = My_Model_User::insertUpdate(
-//					$this->_weiboUser['id'], 
-//					$this->_weiboUser['name'],
-//					$this->getActionTime()
-//					);
-//			if (!$ret) {
-//				throw new Exception('update user error');
-//			}
-//			My_Model_UserStatus::deleteByWeiboId($this->_weiboUser['id']);
-//		} catch (Exception $e) {
-//			$this->_exception = $e;
-//		}
-//
-//		$this->setViewParams(
-//				'data', 
-//				array('success' => !empty($ret) ? 1 : 0)
-//				);
+	}
+
+	public function isLoginAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '已登录',
+				);
+		try {
+			if(!isset($_SESSION['auth']) || !isset($_SESSION['auth']['user'])) {
+				throw new Exception('未登录');
+			}
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
+	}
+
+	public function topAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '成功',
+				);
+		try {
+			$limit = intval($this->getRequest('limit'));
+			if(!$limit) {
+				$limit = 20;
+			}
+			$users = My_Model_User::getUserOrderByScore($limit);
+			$cell = array();
+			foreach($users as $index => $user) {
+				$cell[] = array(
+						'num' => $index + 1,
+						'name' => $user['name'],
+						'score' => $user['total_score'],
+						'tel' => $user['phone'],
+					       );
+			}
+			$retData['root'] = array(
+					'name' => '积分排行榜',
+					'cells' => array(
+						'titles' => array(
+							'num' => '排名',
+							'name' => '姓名',
+							'tel' => '手机号',
+							'score' => '积分',
+							),
+						'cell' => $cell,
+						),
+					);
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
 	}
 
 	public function regAction() {
@@ -89,9 +125,9 @@ class My_Action_Game extends My_Action_Abstract {
 				if(My_Service_Validator::notEmpty(trim($this->getRequest('phone'))) === false) {
 					throw new Exception('手机号不能为空');
 				}
-				if(My_Service_Validator::notEmpty(trim($this->getRequest('email'))) === false) {
+				/*if(My_Service_Validator::notEmpty(trim($this->getRequest('email'))) === false) {
 					throw new Exception('email不能为空');
-				}
+				}*/
 				$ret = My_Model_User::addUser(
 						$this->getRequest('name'),
 						$this->getRequest('password'),
@@ -488,7 +524,7 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	protected function _preAction() {
-		$unauthActions = array('login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
+		$unauthActions = array('top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
 		if(!in_array($this->getActionName(), $unauthActions)) {
 			$session = $this->getSession('auth');
 			if(!isset($session['user']) || empty($session['user'][0]['id'])) {
