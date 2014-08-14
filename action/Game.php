@@ -48,6 +48,21 @@ class My_Action_Game extends My_Action_Abstract {
 		$this->setViewParams('data', $retData);
 	}
 
+	public function gameConfAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '已登录',
+				);
+		try {
+			$gameConfig = ConfigLoader::getInstance()->get('game');
+			$retData['game_conf'] = $gameConfig['lv_conf'];
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
+	}
+
 	public function isLoginAction() {
 		$retData = array(
 				'code' => 1,
@@ -81,7 +96,7 @@ class My_Action_Game extends My_Action_Abstract {
 						'num' => $index + 1,
 						'name' => $user['name'],
 						'score' => $user['total_score'],
-						'tel' => $user['phone'],
+						'tel' => substr_replace($user['phone'], '***', strlen($user['phone']) - 7, 3),
 					       );
 			}
 			$retData['root'] = array(
@@ -524,7 +539,7 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	protected function _preAction() {
-		$unauthActions = array('top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
+		$unauthActions = array('gameConf', 'top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
 		if(!in_array($this->getActionName(), $unauthActions)) {
 			$session = $this->getSession('auth');
 			if(!isset($session['user']) || empty($session['user'][0]['id'])) {
