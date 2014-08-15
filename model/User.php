@@ -90,5 +90,67 @@ class My_Model_User {
 			? $res->fetchAll(PDO::FETCH_ASSOC)
 			: false;
 	}
+
+	public static function getUserOrderByPrize() {
+		$res = My_Model_Base::getInstance()->query(
+				'SELECT * FROM `user` WHERE `prize` > 0 ORDER BY `prize` ASC',
+				array()
+				);
+		return $res
+			? $res->fetchAll(PDO::FETCH_ASSOC)
+			: false;
+	}
+
+	public static function addScore($id, $score) {
+		$res = My_Model_Base::getInstance()->query(
+				'UPDATE `user` SET `total_score` = `total_score` + :score WHERE `id` = :id',
+				array(
+					':score' => $score,
+					':id' => $id,
+					)
+				);
+		return $res ? true : false;
+	}
+
+	public static function loginUpdate($id) {
+		$res = My_Model_Base::getInstance()->query(
+				'UPDATE `user` SET `login_time` = :login_time WHERE `id` = :id',
+				array(
+					':login_time' => time(),
+					':id' => $id,
+					)
+				);
+		return $res ? true : false;
+	}
+
+	public static function getUserOrder($score) {
+		$res = My_Model_Base::getInstance()->query(
+				'SELECT COUNT(*) as pos FROM `user` WHERE `total_score` > :score',
+				array(
+					':score' => $score,
+					)
+				);
+		if($res) {
+			$res = $res->fetchAll(PDO::FETCH_ASSOC);
+			return intval($res[0]['pos'])+1;
+		} else {
+			return 99;
+		}
+	}
+
+	public static function getScoreDiff($score) {
+		$res = My_Model_Base::getInstance()->query(
+				'SELECT TOTAL_SCORE-:score as diff FROM `user` WHERE `total_score` > :score ORDER BY TOTAL_SCORE ASC LIMIT 1',
+				array(
+					':score' => $score,
+					)
+				);
+		if($res) {
+			$res = $res->fetchAll(PDO::FETCH_ASSOC);
+			return intval($res[0]['diff']);
+		} else {
+			return 99;
+		}
+	}
 }
 

@@ -13,6 +13,8 @@ CREATE TABLE `user` (
   `weibo_name` varchar(64) DEFAULT NULL COMMENT '微博用户名',
   `total_score` bigint NOT NULL DEFAULT 3000 COMMENT '用户总得分',
   `level` smallint NOT NULL DEFAULT '0' COMMENT '用户当前到达难度，0-5',
+  `prize` smallint NOT NULL DEFAULT '0' COMMENT '获奖标志',
+  `cont_login` smallint NOT NULL DEFAULT '0' COMMENT '连续登录次数',
   `login_time` bigint NOT NULL DEFAULT '0' COMMENT '登录时间',
   `create_time` bigint NOT NULL DEFAULT '0' COMMENT '注册时间',
   PRIMARY KEY (`id`),

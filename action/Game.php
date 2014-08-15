@@ -21,7 +21,7 @@ class My_Action_Game extends My_Action_Abstract {
 				'msg' => '登录成功',
 				);
 		try {
-			if(strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
 				if(My_Service_Validator::notEmpty(trim($this->getRequest('name'))) === false) {
 					throw new Exception('用户名不能为空');
 				}
@@ -99,7 +99,7 @@ class My_Action_Game extends My_Action_Abstract {
 						'tel' => substr_replace($user['phone'], '***', strlen($user['phone']) - 7, 3),
 					       );
 			}
-			$retData['root'] = array(
+			$retData['data'] = array(array(
 					'name' => '积分排行榜',
 					'cells' => array(
 						'titles' => array(
@@ -110,7 +110,35 @@ class My_Action_Game extends My_Action_Abstract {
 							),
 						'cell' => $cell,
 						),
-					);
+					));
+		} catch(Exception $e) {
+			$retData['code'] = 0;
+			$retData['msg'] = $e->getMessage();
+		}
+		$this->setViewParams('data', $retData);
+	}
+
+	public function prizeAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '成功',
+				);
+		try {
+			$limit = intval($this->getRequest('limit'));
+			if(!$limit) {
+				$limit = 20;
+			}
+			$users = My_Model_User::getUserOrderByPrize();
+			$cell = array();
+			foreach($users as $index => $user) {
+				$cell[] = array(
+						'num' => $index + 1,
+						'name' => $user['name'],
+						'score' => $user['total_score'],
+						'tel' => substr_replace($user['phone'], '***', strlen($user['phone']) - 7, 3),
+					       );
+			}
+			$retData['data'] = array();
 		} catch(Exception $e) {
 			$retData['code'] = 0;
 			$retData['msg'] = $e->getMessage();
@@ -143,6 +171,7 @@ class My_Action_Game extends My_Action_Abstract {
 				/*if(My_Service_Validator::notEmpty(trim($this->getRequest('email'))) === false) {
 					throw new Exception('email不能为空');
 				}*/
+				// 首次登录奖励3000分，用数据字段default value实现
 				$ret = My_Model_User::addUser(
 						$this->getRequest('name'),
 						$this->getRequest('password'),
@@ -194,10 +223,10 @@ class My_Action_Game extends My_Action_Abstract {
 			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
 				$level = $this->getRequest('level');
 				$user = $this->getSession('auth')['user'];
-				if(empty($level) && intval($level) !== 0) {
+				if(empty($level)) {
 					$level = $user[0]['level'];
 				}
-				if($level > $user[0]['level']) {
+				if($level > $user[0]['level'] || $level < 0) {
 					throw new Exception('用户关卡选择出错');
 				}
 				$_SESSION['play']['start_time'] = time();
@@ -230,10 +259,8 @@ class My_Action_Game extends My_Action_Abstract {
 					throw new Exception('用户不在游戏中');
 				}
 				$gameConfig = ConfigLoader::getInstance()->get('game');
+				$success = $this->getRequest('success');
 				$lvConf = $gameConfig['lv_conf'][$_SESSION['play']['level']];
-				if(time() - $_SESSION['play']['start_time'] < $lvConf['time']) {
-					throw new Exception('用户正在游戏，时间未到');
-				}
 				$score = intval($this->getRequest('score'));
 				if($score > $lvConf['m_score'] * $lvConf['monster']
 						+ $lvConf['b_score'] * $lvConf['boss']) {
@@ -241,15 +268,21 @@ class My_Action_Game extends My_Action_Abstract {
 				}
 				$pssLv = $_SESSION['auth']['user'][0]['level'];
 				$curLv = $_SESSION['play']['level'];
-				if($curLv < count($gameConfig['lv_conf']) - 1) {
-					$nxtLv = $curLv + 1;
-				} else {
-					$nxtLv = count($gameConfig['lv_conf']) - 1;
+				$nxtLv = $curLv;
+				$lvMax = count($gameConfig['lv_conf']) - 1;
+				if($success == 1) {
+					if($curLv < $lvMax) {
+						$nxtLv = $curLv + 1;
+					} else {
+						$nxtLv = $lvMax;
+					}
+					if($passLv < $lvMax && $curLv == $lvMax) { // 首次通关,奖励5000分
+						$score += 5000; 
+					}
+					if($nxtLv > $pssLv) {
+						$pssLv = $nxtLv;
+					}
 				}
-				if($nxtLv > $pssLv) {
-					$pssLv = $nxtLv;
-				}
-
 				$ret = My_Model_User::passLevel(
 						$_SESSION['auth']['user'][0]['id'],
 						$score = intval($score)+intval($_SESSION['auth']['user'][0]['total_score']), 
@@ -263,7 +296,9 @@ class My_Action_Game extends My_Action_Abstract {
 
 				$retData['total_score'] = $score;
 				$retData['level_next'] = $nxtLv;
-				$retData['level_max'] = count($gameConfig['lv_conf']) - 1;
+				$retData['level_max'] = $lvMax;
+				$retData['user_order'] = My_Model_User::getUserOrder($score);
+				$retData['user_diff'] = My_Model_User::getScoreDiff($score);
 			} else {
 				throw new Exception('用户请求出错');
 			}
@@ -459,7 +494,13 @@ class My_Action_Game extends My_Action_Abstract {
 
 	public function authAction() {}
 
-	public function unauthAction() {}
+	public function unauthAction() {
+		$retData = array(
+				'code' => 2,
+				'msg' => '请登录',
+				);
+		$this->setViewParams('data', $retData);
+	}
 
 	public function connectAction() {
 		// set platform
@@ -539,7 +580,7 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	protected function _preAction() {
-		$unauthActions = array('gameConf', 'top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
+		$unauthActions = array('prize','gameConf', 'top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
 		if(!in_array($this->getActionName(), $unauthActions)) {
 			$session = $this->getSession('auth');
 			if(!isset($session['user']) || empty($session['user'][0]['id'])) {
