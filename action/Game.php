@@ -13,6 +13,35 @@ class My_Action_Game extends My_Action_Abstract {
 
 	private function _doLogin($user) {
 		$_SESSION['auth']['user'] = $user;
+		$logs = My_Model_LoginLog::getByUserId($user[0]['id']);
+		var_dump($logs);
+		$firstLog = true;
+		$sevenDay = false;
+		$fiveDay = false;
+		foreach($logs as $index => $log) {
+			if($log['dn'] == date('z', time()) + 1) {
+				$firstLog = false;
+			}
+		}
+		if($sevenDay === true) { // 7天连续登录,抽礼包
+			$seeds = rand(1,4);
+			$score = 0;
+			if($seeds < 4) {
+				$ret = My_Model_LoginPrize::getSmall();
+				if($ret) $score = 2000;
+			} else {
+				$ret = My_Model_LoginPrize::getBig();
+				if($ret) $score = 5000;
+			}
+			My_Model_User::addScore($user[0]['id'], $score);
+		}
+		if($fiveDay === true) { // 5天连续登录多奖励200分
+			My_Model_User::addScore($user[0]['id'], 200);
+		}
+		if($firstLog !== false) { // 当日首次登录,送200分
+			My_Model_User::addScore($user[0]['id'], 200);
+		}
+		My_Model_LoginLog::add($user[0]['id']);
 	}
 
 	public function loginAction() {
@@ -128,17 +157,34 @@ class My_Action_Game extends My_Action_Abstract {
 			if(!$limit) {
 				$limit = 20;
 			}
-			$users = My_Model_User::getUserOrderByPrize();
-			$cell = array();
+			$users = My_Model_User::getUserOrderByPrize($limit);
+			$prizes = array();
 			foreach($users as $index => $user) {
-				$cell[] = array(
-						'num' => $index + 1,
-						'name' => $user['name'],
-						'score' => $user['total_score'],
-						'tel' => substr_replace($user['phone'], '***', strlen($user['phone']) - 7, 3),
-					       );
+				$prizes[$user['prize']][] = $user;
 			}
-			$retData['data'] = array();
+			foreach($prizes as $prizeN => $prizeU) {
+				$cell = array();
+				foreach($prizeU as $index => $user) {
+					$cell[] = array(
+							'num' => $index + 1,
+							'name' => $user['name'],
+							'score' => $user['total_score'],
+							'tel' => substr_replace($user['phone'], '***', strlen($user['phone']) - 7, 3),
+						       );
+				}
+				$retData['data'][] = array(
+						'name' => "第{$prizeN}期获奖名单",
+						'cells' => array(
+							'titles' => array(
+								'num' => '序号',
+								'name' => '姓名',
+								'tel' => '手机号',
+								'score' => '积分',
+								),
+							'cell' => $cell,
+							),
+						);
+			}
 		} catch(Exception $e) {
 			$retData['code'] = 0;
 			$retData['msg'] = $e->getMessage();
@@ -152,7 +198,7 @@ class My_Action_Game extends My_Action_Abstract {
 				'msg' => '注册成功',
 				);
 		try {
-			if(strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
 				if(My_Service_Validator::notEmpty(trim($this->getRequest('name'))) === false) {
 					throw new Exception('用户名不能为空');
 				}
@@ -175,8 +221,7 @@ class My_Action_Game extends My_Action_Abstract {
 				$ret = My_Model_User::addUser(
 						$this->getRequest('name'),
 						$this->getRequest('password'),
-						$this->getRequest('phone'),
-						$this->getRequest('email')
+						$this->getRequest('phone')
 						);
 				if(!$ret) {
 					throw new Exception('服务器出错，请稍等再试');

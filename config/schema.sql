@@ -23,6 +23,23 @@ CREATE TABLE `user` (
   KEY `create_time_idx` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表'; 
 
+CREATE TABLE `login_log` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户自增ID',
+  `user_id` varchar(64) NOT NULL COMMENT '用户ID',
+  `login_time` bigint NOT NULL DEFAULT '0' COMMENT '登录时间',
+  PRIMARY KEY (`id`),
+  KEY `user_id_idx` (`user_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录日志表'; 
+
+CREATE TABLE `login_prize` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '用户自增ID',
+  `small_prize` smallint NOT NULL DEFAULT '15' COMMENT '小奖数量',
+  `big_prize` smallint NOT NULL DEFAULT '5' COMMENT '大奖数量',
+  `date_time` bigint NOT NULL DEFAULT '0' COMMENT '日期',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `date_time_idx` (`date_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='登录奖励包'; 
+
 CREATE TABLE `qualified_user` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '流水ID',
   `weibo_id` varchar(64) NOT NULL COMMENT '微博用户ID, s_%s 新浪; t_%s 腾讯',

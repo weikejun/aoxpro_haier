@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<title>BOSCH2</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style type="text/css" media="screen">
+		html, body { height:100%; background-color: #ffffff;}
+		body { margin:0; padding:0; overflow:hidden; }
+		#flashContent { width:100%; height:100%; }
+		</style>
+<script type="text/javascript"> 
+function share_FN(I,pNum,myScore,roleName){
+//I,myRole,myScore,
+
+    //分享:人人、新浪、豆瓣、QQ
+
+	var imgPathrr = 'http://bosch.jdodrc.com/image/share/rr/';
+	var imgPathsn = 'http://bosch.jdodrc.com/image/share/sn/';
+	var imgPathdb = 'http://bosch.jdodrc.com/image/share/db/';
+	var imgPathqq = 'http://bosch.jdodrc.com/image/share/qq/';
+	var content = '博世科技新人战队之战';
+	
+	var __title = ' 恭喜你在科技新人PK赛中勇夺'+myScore+'分！为'+roleName+'战队成为科技新人王者队贡献力量。小伙伴们都赶紧为自己的战队加分吧，更有获得博世定制星空灯，躺床上就能看星星，一起和另一半感受下来自星星的博世吧！'
+	var _title = '';
+	var title = '';
+	if(I==1){
+	    title = '科技新人·战队之战'+__title;
+	}else if(I==3){
+	    title = '科技新人·战队之战'+__title;
+	}else{
+	    title = '%23科技新人·战队之战%23'+__title;
+	}
+
+    //var link = 'http://bosch.jdodrc.com/index2.html';
+    var link = 'http://page.renren.com/601445168/channel-472793';
+
+    var link2 = 'http://bosch.jdodrc.com';
+    var url = '';
+    switch (I) {
+        case 1: 
+        //url = 'http://share.renren.com/share/buttonshare.do?link=' + link+'&description='+title+'&pic='+imgPath+pNum+".jpg";
+	url = 'http://widget.renren.com/dialog/share?charset=UTF-8&resourceUrl='+link+ '&srcUrl='+link+ '&title='+encodeURI(content)+'&description='+encodeURI(title)+'&pic='+imgPathrr+pNum+".jpg"
+	
+        break;
+ 
+        case 2: 
+        url = 'http://v.t.sina.com.cn/share/share.php?appkey=2684493555&url=' + link + '&title=' + title + '&source=&sourceUrl=&content=utf8&pic='+imgPathsn+pNum+".jpg";
+        break;
+ 
+        case 3: 
+        url = 'http://www.douban.com/share/service?charset=UTF-8&href='+ link + '&name='+ encodeURI(content)+'&text='+encodeURI(title)+'&image='+imgPathdb+pNum+".jpg";
+        break;
+ 
+        case 4:
+	url = 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+link+ '&title='+content+'&summary='+title+'&pics='+imgPathqq+pNum+".jpg";
+        break;
+    }
+    window.open(url, '_blank');
+};
+</script>
+	</head>
+	<body>
+		<div id="flashContent">
+			<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" width="980" height="550" id="bosch2" align="middle">
+				<param name="movie" value="swf/bosch2.swf" />
+				<param name="quality" value="high" />
+				<param name="bgcolor" value="#ffffff" />
+				<param name="play" value="true" />
+				<param name="loop" value="true" />
+				<param name="wmode" value="window" />
+				<param name="scale" value="showall" />
+				<param name="menu" value="true" />
+				<param name="devicefont" value="false" />
+				<param name="salign" value="" />
+				<param name="allowScriptAccess" value="sameDomain" />
+				<!--[if !IE]>-->
+				<object type="application/x-shockwave-flash" data="swf/bosch2.swf" width="980" height="550">
+					<param name="movie" value="swf/bosch2.swf" />
+					<param name="quality" value="high" />
+					<param name="bgcolor" value="#ffffff" />
+					<param name="play" value="true" />
+					<param name="loop" value="true" />
+					<param name="wmode" value="window" />
+					<param name="scale" value="showall" />
+					<param name="menu" value="true" />
+					<param name="devicefont" value="false" />
+					<param name="salign" value="" />
+					<param name="allowScriptAccess" value="sameDomain" />
+				<!--<![endif]-->
+					<a href="http://www.adobe.com/go/getflash">
+						<img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="获得 Adobe Flash Player" />
+					</a>
+				<!--[if !IE]>-->
+				</object>
+				<!--<![endif]-->
+			</object>
+		</div>
+<script type="text/javascript">
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F16346a5814535245ff3d4f36ddf177fc' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+	</body>
+</html>

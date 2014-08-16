@@ -1,0 +1,1 @@
+﻿{"code":1,"msg":"提示文案","lv_conf":{"monster":30,"m_score":100,"boss":1,"b_score":10000,"time":10,"m_attack":2,"b_attack":4,"m_delay":3,"move_spe":6},"total_score":9500,"level":6}

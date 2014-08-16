@@ -54,7 +54,7 @@ class My_Model_User {
 			: false;
 	}
 
-	public static function addUser($name, $password, $phone, $email) {
+	public static function addUser($name, $password, $phone, $email='placeholder') {
 		$res = My_Model_Base::getInstance()->query(
 				'INSERT INTO `user` (`name`, `password`, `phone`, `email`, `login_time`, `create_time`) VALUES (:name, :password, :phone, :email, :login_time, :create_time)',
 				array(
@@ -91,9 +91,9 @@ class My_Model_User {
 			: false;
 	}
 
-	public static function getUserOrderByPrize() {
+	public static function getUserOrderByPrize($limit) {
 		$res = My_Model_Base::getInstance()->query(
-				'SELECT * FROM `user` WHERE `prize` > 0 ORDER BY `prize` ASC',
+				'SELECT * FROM `user` WHERE `prize` > 0 ORDER BY `prize` ASC LIMIT ' . intval($limit),
 				array()
 				);
 		return $res

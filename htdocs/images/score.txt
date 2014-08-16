@@ -1,0 +1,25 @@
+﻿<root>
+	<Cell Type="3" Name="积分排行榜"/>
+	<Cell Type="2" Num="名称" Name="姓名" QQ="QQ号" Score="积分"/>
+	<Cell Type="1" Num="1" Name="李1" QQ="66005199" Score="100001"/>
+	<Cell Type="1" Num="2" Name="李2" QQ="66005199" Score="100002"/>
+	<Cell Type="1" Num="3" Name="李3" QQ="66005199" Score="100003"/>
+	<Cell Type="1" Num="4" Name="李4" QQ="66005199" Score="100004"/>
+	<Cell Type="1" Num="5" Name="李5" QQ="66005199" Score="100005"/>
+	<Cell Type="1" Num="6" Name="李6" QQ="66005199" Score="100006"/>
+	<Cell Type="1" Num="7" Name="李7" QQ="66005199" Score="100007"/>
+	<Cell Type="1" Num="8" Name="李8" QQ="66005199" Score="100008"/>
+	<Cell Type="1" Num="9" Name="李9" QQ="66005199" Score="100009"/>
+	<Cell Type="1" Num="10" Name="李10" QQ="66005199" Score="100000"/>
+
+	<Cell Type="1" Num="11" Name="李11" QQ="66005199" Score="100001"/>
+	<Cell Type="1" Num="12" Name="李12" QQ="66005199" Score="100002"/>
+	<Cell Type="1" Num="13" Name="李13" QQ="66005199" Score="100003"/>
+	<Cell Type="1" Num="14" Name="李14" QQ="66005199" Score="100004"/>
+	<Cell Type="1" Num="15" Name="李15" QQ="66005199" Score="100005"/>
+	<Cell Type="1" Num="16" Name="李16" QQ="66005199" Score="100006"/>
+	<Cell Type="1" Num="17" Name="李17" QQ="66005199" Score="100007"/>
+	<Cell Type="1" Num="18" Name="李18" QQ="66005199" Score="100008"/>
+	<Cell Type="1" Num="19" Name="李19" QQ="66005199" Score="100009"/>
+	<Cell Type="1" Num="20" Name="李20" QQ="66005199" Score="100000"/>
+</root>
