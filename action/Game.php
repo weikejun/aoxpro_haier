@@ -14,16 +14,20 @@ class My_Action_Game extends My_Action_Abstract {
 	private function _doLogin($user) {
 		$_SESSION['auth']['user'] = $user;
 		$logs = My_Model_LoginLog::getByUserId($user[0]['id']);
-		var_dump($logs);
 		$firstLog = true;
-		$sevenDay = false;
-		$fiveDay = false;
+		$dayFlag = 1;
 		foreach($logs as $index => $log) {
 			if($log['dn'] == date('z', time()) + 1) {
 				$firstLog = false;
 			}
+			if($index == 0) continue;
+			if($log['dn'] - $logs[$index - 1]['dn'] == 1) {
+				$dayFlag = ($dayFlag + 1) % 7;
+			} else {
+				$dayFlag = 1;
+			}
 		}
-		if($sevenDay === true) { // 7天连续登录,抽礼包
+		if($dayFlag === 6 && $firstLog) { // 7天连续登录,抽礼包
 			$seeds = rand(1,4);
 			$score = 0;
 			if($seeds < 4) {
@@ -35,7 +39,7 @@ class My_Action_Game extends My_Action_Abstract {
 			}
 			My_Model_User::addScore($user[0]['id'], $score);
 		}
-		if($fiveDay === true) { // 5天连续登录多奖励200分
+		if($dayFlag >= 4 && $firstLog) { // 5天连续登录多奖励200分
 			My_Model_User::addScore($user[0]['id'], 200);
 		}
 		if($firstLog !== false) { // 当日首次登录,送200分

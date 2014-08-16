@@ -14,7 +14,7 @@ class My_Model_LoginLog {
 
 	public static function getByUserId($userId) {
 		$res = My_Model_Base::getInstance()->query(
-				'SELECT DAYOFYEAR(FROM_UNIXTIME(`login_time`)) as dn,COUNT(*) as num FROM `login_log` WHERE `user_id`=1 GROUP BY DAYOFYEAR(FROM_UNIXTIME(`login_time`)) DESC',
+				'SELECT DAYOFYEAR(FROM_UNIXTIME(`login_time`)) as dn,COUNT(*) as num FROM `login_log` WHERE `user_id`=1 GROUP BY DAYOFYEAR(FROM_UNIXTIME(`login_time`)) ASC',
 				array()
 				);
 		return $res
