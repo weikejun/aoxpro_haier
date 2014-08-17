@@ -258,7 +258,7 @@ class My_Action_Game extends My_Action_Abstract {
 				);
 		$retData['name'] = $_SESSION['auth']['user'][0]['name'];
 		$retData['total_score'] = $_SESSION['auth']['user'][0]['total_score'];
-		$retData['level'] = $_SESSION['auth']['user'][0]['level'];
+		$retData['level_max'] = $_SESSION['auth']['user'][0]['level'];
 
 		$this->setViewParams('data', $retData);
 	}
@@ -272,7 +272,7 @@ class My_Action_Game extends My_Action_Abstract {
 			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
 				$level = $this->getRequest('level');
 				$user = $this->getSession('auth')['user'];
-				if(empty($level)) {
+				if(empty($level) && intval($level) !== 0) {
 					$level = $user[0]['level'];
 				}
 				if($level > $user[0]['level'] || $level < 0) {

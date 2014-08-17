@@ -11,7 +11,7 @@ $gConfig['game'] = array(
 		'lv_conf' => array(
 			0 => array(
 				'time' => 30,
-				'monster' => 10,
+				'monster' => 30,
 				'm_score' => 100,
 				'boss' => 0,
 				'b_score' => 0,
@@ -22,7 +22,7 @@ $gConfig['game'] = array(
 				),
 			1 => array(
 				'time' => 40,
-				'monster' => 15,
+				'monster' => 40,
 				'm_score' => 100,
 				'boss' => 0,
 				'b_score' => 0,
@@ -33,7 +33,7 @@ $gConfig['game'] = array(
 				),
 			2 => array(
 				'time' => 50,
-				'monster' => 20,
+				'monster' => 50,
 				'm_score' => 100,
 				'boss' => 0,
 				'b_score' => 0,
@@ -44,7 +44,7 @@ $gConfig['game'] = array(
 				),
 			3 => array(
 				'time' => 60,
-				'monster' => 25,
+				'monster' => 60,
 				'm_score' => 100,
 				'boss' => 0,
 				'b_score' => 0,
@@ -55,7 +55,7 @@ $gConfig['game'] = array(
 				),
 			4 => array(
 				'time' => 70,
-				'monster' => 30,
+				'monster' => 70,
 				'm_score' => 100,
 				'boss' => 0,
 				'b_score' => 0,
@@ -66,7 +66,7 @@ $gConfig['game'] = array(
 				),
 			5 => array(
 				'time' => 90,
-				'monster' => 30,
+				'monster' => 90,
 				'm_score' => 100,
 				'boss' => 1,
 				'b_score' => 10000,
