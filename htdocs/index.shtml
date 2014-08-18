@@ -18,6 +18,11 @@
 		body { margin:0; padding:0; overflow:hidden; }
 		#flashContent { width:100%; height:100%; }
 		</style>
+	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=940908147" type="text/javascript" charset="utf-8"></script>
+	<script>document.write('<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101146434" data-redirecturi="'+location.href+'" charset="utf-8"><\/script>');</script>
+	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+	<script src="http://ceshi.you48.com/js/jquery1.42.min.js?v=123456"></script>
+	<script src="http://ceshi.you48.com/js/jquery.cookie.js?v=123456"></script>
 <script type="text/javascript">
 function getSwfInstance(movieName) { 
   if (navigator.appName.indexOf("Microsoft") != -1) { 
@@ -37,6 +42,32 @@ function callFlash(Str) {
 		window.document.main.callFlash(Str);
 	}
 }*/
+function login_FN(tp) {
+	if(tp == 'sina') {
+	WB2.login(function() {
+			$.ajax({
+				async: false,
+				type: 'POST',
+				url: "http://ceshi.you48.com/index.php?action=connect",
+				dataType: 'jsonp',
+				data: {
+					platform: tp,
+					token: encodeURI($.cookie('weibojs_940908147'))
+				},
+				success: function(msg) {
+					alert(msg);
+				}
+			});
+	});
+	} else if(tp == 'qq') {
+		if(QC.Login.check() == false) {
+			QC.Login.showPopup({
+				appId: '101146434',
+				redirectURI: "http://ceshi.you48.com/qq_connect.html"
+			});
+		}
+	}
+}
 function share_FN(I,level){
 	var shareTxt = '';
 	switch(level) {
