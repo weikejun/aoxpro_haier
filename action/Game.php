@@ -27,9 +27,9 @@ class My_Action_Game extends My_Action_Abstract {
 				$dayFlag = 1;
 			}
 		}
+		$score = 0;
 		if($dayFlag === 6 && $firstLog) { // 7天连续登录,抽礼包
 			$seeds = rand(1,4);
-			$score = 0;
 			if($seeds < 4) {
 				$ret = My_Model_LoginPrize::getSmall();
 				if($ret) $score = 2000;
@@ -37,13 +37,18 @@ class My_Action_Game extends My_Action_Abstract {
 				$ret = My_Model_LoginPrize::getBig();
 				if($ret) $score = 5000;
 			}
-			My_Model_User::addScore($user[0]['id'], $score);
+			//My_Model_User::addScore($user[0]['id'], $score);
 		}
 		if($dayFlag >= 4 && $firstLog) { // 5天连续登录多奖励200分
-			My_Model_User::addScore($user[0]['id'], 200);
+			$score += 200;
+			//My_Model_User::addScore($user[0]['id'], 200);
 		}
 		if($firstLog !== false) { // 当日首次登录,送200分
-			My_Model_User::addScore($user[0]['id'], 200);
+			$score += 200;
+			//My_Model_User::addScore($user[0]['id'], 200);
+		}
+		if(My_Model_User::addScore($user[0]['id'], $score)) {
+			$_SESSION['auth']['user'][0]['total_score'] += $score;
 		}
 		My_Model_LoginLog::add($user[0]['id']);
 	}
@@ -222,10 +227,16 @@ class My_Action_Game extends My_Action_Abstract {
 					throw new Exception('email不能为空');
 				}*/
 				// 首次登录奖励3000分，用数据字段default value实现
+				$connectId = '';
+				if(isset($_SESSION['auth']) &&
+						isset($_SESSION['auth']['connect'])) {
+					$connectId = $_SESSION['auth']['connect']['connectId'];
+				}
 				$ret = My_Model_User::addUser(
 						$this->getRequest('name'),
 						$this->getRequest('password'),
-						$this->getRequest('phone')
+						$this->getRequest('phone'),
+						$connectId
 						);
 				if(!$ret) {
 					throw new Exception('服务器出错，请稍等再试');
@@ -347,7 +358,7 @@ class My_Action_Game extends My_Action_Abstract {
 				$retData['level_next'] = $nxtLv;
 				$retData['level_max'] = $lvMax;
 				$retData['user_order'] = My_Model_User::getUserOrder($score);
-				$retData['user_diff'] = My_Model_User::getScoreDiff($score);
+				$retData['diff'] = My_Model_User::getScoreDiff($score);
 			} else {
 				throw new Exception('用户请求出错');
 			}
@@ -552,8 +563,36 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	public function connectAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '登录成功',
+				);
+		$retData['callback'] = $this->getRequest('callback');
+		$platform = $this->getRequest('platform');
+		if($platform == 'sina') {
+			$connectId = 't_';
+		} elseif($platform == 'qq') {
+			$connectId = 'q_';
+		} else {
+			$connectId = 'null';
+		}
+		$params = explode('&', $this->getRequest('token'));
+		foreach($params as $param) {
+			list($key, $value) = explode('=', $param);
+			if($key == 'uid') $connectId .= $value;
+		}
+		$user = My_Model_User::getByWeiboId($connectId);
+		if(empty($user)) {
+			unset($_SESSION['auth']['user']);
+			$retData['msg'] = '登录成功，为了方便您领奖，请留下联系方式^_^';
+		} else {
+			$this->_doLogin($user);
+		}
+		$_SESSION['auth']['connect'] = array('connectId' => $connectId);
+
+		$this->setViewParams('data', $retData);
 		// set platform
-		$p = $this->getRequest('platform');
+		/*$p = $this->getRequest('platform');
 		if (!in_array($p, $this->_platformKey)) {
 			$p = $this->_platformKey[0];
 		}
@@ -577,7 +616,7 @@ class My_Action_Game extends My_Action_Abstract {
 		}
 
 		// redirect
-		$this->redirect($url);
+		$this->redirect($url);*/
 	}
 
 	public function statAction() {

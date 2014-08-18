@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<script>document.write('<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101146434" data-redirecturi="'+location.href+'" charset="utf-8"><\/script>');</script>
+	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+	<script src="http://ceshi.you48.com/js/jquery1.42.min.js?v=123456"></script>
+	<script src="http://ceshi.you48.com/js/jquery.cookie.js?v=123456"></script>
+	<body>
+	<script type="text/javascript"> 
+	QC.Login.getMe(function(openId) {
+			$.ajax({
+				async: false,
+				type: 'POST',
+				url: "http://ceshi.you48.com/index.php?action=connect",
+				dataType: 'jsonp',
+				data: {
+					platform: 'qq',
+					token: encodeURI('uid='+openId)
+				},
+				success: function(msg) {
+					alert(msg);
+					window.close();
+				}
+			});
+	});
+	</script>
+</body>
+</html>

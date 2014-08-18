@@ -1,7 +1,17 @@
 ﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
 	<head>
-		<title>Haier</title>
+<title>空气捍卫者|营销活动|海尔家电家居-美好住居生活解决方案提供商</title>
+<meta name="description" content="空气捍卫者" />
+<meta name="keywords" content="空气捍卫者" />
+<!-- 公用 head start-->
+<!--#include file="/cn/public/public_style/nf_inc_head.shtml"-->
+<!-- 公用 head end-->
+<!-- 导航定位 start-->
+<script type="text/javascript">var tempUrl = '首页#消费类产品';</script>
+<!--导航定位 end-->
+<!--自定义 head start-->
+		<meta property="qc:admins" content="24322651740161754063757" />
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style type="text/css" media="screen">
 		html, body { height:100%; background-color: #000000;}
@@ -70,14 +80,19 @@ function share_FN(I,level){
 	window.open(url, '_blank');
 };
 </script>
+<!--自定义 head end-->
 	</head>
 	<body>
+	<!-- header start-->
+		<!--#include file="/cn/public/public_header/nf_inc_header.shtml"--> 
+	<!-- header end-->
+<!--
 <div>
 <form id="jsForm">
 		<input type="button" value="调用flash" onclick="callFlash(123456)" />
 	</form>
 </div>
-
+-->
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="main" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
@@ -154,6 +169,9 @@ function share_FN(I,level){
             <!--</td>
 	      </tr>
     </table>-->
-
+	<!-- START footer -->
+		<!--#include file="/cn/public/public_footer/nf_inc_footer.shtml"-->
+		<!--#include file="/cn/public/public_style/temp_head.shtml"-->
+	<!-- END footer -->
 	</body>
 </html>

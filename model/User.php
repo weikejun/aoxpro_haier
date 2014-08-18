@@ -25,8 +25,8 @@ class My_Model_User {
 					':weibo_id' => $weiboId
 				     )
 				);
-		return !$res || $res->rowCount() 
-			? $res->fetchAll(PDO::FETCH_CLASS)
+		return $res && $res->rowCount() 
+			? $res->fetchAll(PDO::FETCH_ASSOC)
 			: false;
 	}
 
@@ -54,13 +54,14 @@ class My_Model_User {
 			: false;
 	}
 
-	public static function addUser($name, $password, $phone, $email='placeholder') {
+	public static function addUser($name, $password, $phone, $connectId, $email='placeholder') {
 		$res = My_Model_Base::getInstance()->query(
-				'INSERT INTO `user` (`name`, `password`, `phone`, `email`, `login_time`, `create_time`) VALUES (:name, :password, :phone, :email, :login_time, :create_time)',
+				'INSERT INTO `user` (`name`, `password`, `phone`, `weibo_id`, `email`, `login_time`, `create_time`) VALUES (:name, :password, :phone, :weibo_id, :email, :login_time, :create_time)',
 				array(
 					':name' => $name, 
 					':password' => self::genPassword($password), 
 					':phone' => $phone, 
+					':weibo_id' => $connectId, 
 					':email' => $email,
 					':login_time' => time(),
 					':create_time' => time(),

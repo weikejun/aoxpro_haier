@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN" xml:lang="zh-CN">
+	<head>
+		<html xmlns:wb="http://open.weibo.com/wb">
+		<title>Haier</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style type="text/css" media="screen">
+		html, body { height:100%; }
+		body { margin:0; padding:0; overflow:hidden; }
+		#flashContent { width:100%; height:100%; }
+		</style>
+	</head>
+	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=940908147" type="text/javascript" charset="utf-8"></script>
+	<script>document.write('<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101146434" data-redirecturi="'+location.href+'" charset="utf-8"><\/script>');</script>
+	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+	<script src="http://ceshi.you48.com/js/jquery1.42.min.js?v=123456"></script>
+	<script src="http://ceshi.you48.com/js/jquery.cookie.js?v=123456"></script>
+	<body>
+	<div id="wb_connect_btn"></div>
+<span id="qqLoginBtn"></span>
+<script type="text/javascript"> 
+function login_FN(tp) {
+	if(tp == 'sina') {
+	WB2.login(function() {
+			$.ajax({
+				async: false,
+				type: 'POST',
+				url: "http://ceshi.you48.com/index.php?action=connect",
+				dataType: 'jsonp',
+				data: {
+					platform: tp,
+					token: encodeURI($.cookie('weibojs_940908147'))
+				},
+				success: function(msg) {
+					alert(msg);
+				}
+			});
+	});
+	} else if(tp == 'qq') {
+		if(QC.Login.check() == false) {
+			QC.Login.showPopup({
+				appId: '101146434',
+				redirectURI: "http://ceshi.you48.com/qq_connect.html"
+			});
+		}
+	}
+}
+login_FN('qq');
+QC.Login.signOut();
+function share_FN(I,level){
+	var shareTxt = '';
+	switch(level) {
+		case 0:
+			shareTxt = '我打败了甲醛人了，向细菌战士进攻，离最终大BOSS更近一步了';
+			break;
+		case 4:
+			shareTxt = '打败了五关敌人，就差终极大BOSS了，打败大BOSS，离赢得海尔空气盒子就差一步哈哈哈哈';
+			break;
+		case 5:
+			shareTxt = ['通关了海尔 空气捍卫者，得了个海尔吸尘器，感觉效果不错，准备再冲击游戏大奖了 呼呼','我终于通关了《空气捍卫者》游戏，玩游戏的同时还会获得惊喜大礼，好开心哦！'][Math.round(Math.random()*10)%2]; 
+			break;
+		default:
+			shareTxt = ['想免费获得海尔新一代智能空气净化产品空气盒子，就和我一样，来挑战《空气捍卫者》游戏吧！','《空气捍卫者》，游戏里保卫空气，游戏外赢空气盒子保卫真正的空气。玩的时候，叫上我一起啊！！','亲，2014什么最重要？健康空气。挑战《空气捍卫者》游戏，保卫空气，赢大礼，还不注册？你OUT啦！','《空气捍卫者》游戏酱紫好玩，你妈妈造吗？这游戏是要火的节奏吗？ ','《空气捍卫者》游戏真心好玩啊，还能免费获得海尔新一代智能空气净化器，我拜服了！','这一次是真的啊，我一直想要的空气盒子免费送了。虽然我游戏玩的不咋地，但每天登录就有奖，哇咔咔，空气盒子就这么到手了！'][Math.round(Math.random()*100)%6];
+			break;
+	}
+
+	//分享:人人、新浪、豆瓣、QQ
+	var content = '空气捍卫者大作战';
+	var link = encodeURI('http://ceshi.you48.com/index.shtml');
+	var url = '';
+	switch (I) {
+		case 5: 
+			//url = 'http://share.renren.com/share/buttonshare.do?link=' + link+'&description='+title+'&pic='+imgPath+pNum+".jpg";
+			url = 'http://widget.renren.com/dialog/share?charset=UTF-8&resourceUrl='+link+ '&srcUrl='+link+ '&title='+encodeURI(content)+'&description='+encodeURI(shareTxt)+'&pic=';//+imgPathrr+pNum+".jpg"
+				break;
+		case 2:
+			url = 'http://v.t.qq.com/share/share.php?title='+encodeURI(shareTxt)+'&url='+link+'&appkey=801533466&site='+link+'&pic='; 
+				break;
+		case 1: 
+			url = 'http://v.t.sina.com.cn/share/share.php?appkey=940908147&url=' + link + '&title=' + shareTxt + '&source=&sourceUrl=&content=utf8&pic=';//+imgPathsn+pNum+".jpg";
+			break;
+		case 4: 
+			url = 'http://www.douban.com/share/service?charset=UTF-8&href='+ link + '&name='+ encodeURI(content)+'&text='+encodeURI(shareTxt)+'&image=';//+imgPathdb+pNum+".jpg";
+			break;
+		case 3:
+			url = 'http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url='+link+ '&title='+content+'&summary='+shareTxt+'&pics=';//+imgPathqq+pNum+".jpg";
+			break;
+	}
+	window.open(url, '_blank');
+};
+</script>
+	</body>
+</html>
