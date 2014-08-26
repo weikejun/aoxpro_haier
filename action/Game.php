@@ -60,19 +60,38 @@ class My_Action_Game extends My_Action_Abstract {
 				);
 		try {
 			if(true || strtoupper($this->getServer('REQUEST_METHOD')) == 'POST') {
+				$ver = $this->getRequest('ver');
 				if(My_Service_Validator::notEmpty(trim($this->getRequest('name'))) === false) {
 					throw new Exception('用户名不能为空');
 				}
-				if(My_Service_Validator::notEmpty($this->getRequest('password')) === false) {
+				if($ver != 'new' && My_Service_Validator::notEmpty($this->getRequest('password')) === false) {
 					throw new Exception('密码不能为空');
 				}
 				$user = My_Model_User::getByName(trim($this->getRequest('name')));
 				if($user === false) {
-					throw new Exception('服务器出错，请稍等再试');
+					throw new Exception('服务器出错，请稍后再试');
 				} elseif(empty($user)) {
-					throw new Exception('用户名不存在');
+					// 首次登录奖励3000分，用数据字段default value实现
+					if($ver == 'new') {
+						$connectId = '';
+						if(isset($_SESSION['auth']) &&
+								isset($_SESSION['auth']['connect'])) {
+							$connectId = $_SESSION['auth']['connect']['connectId'];
+						}
+						$ret = My_Model_User::addUser(
+								$this->getRequest('name'),
+								$this->getRequest('name'),
+								$this->getRequest('name'),
+								$connectId
+								);
+						if(!$ret) {
+							throw new Exception('服务器出错，请稍后再试');
+						} 
+					} else {
+						throw new Exception('用户名不存在');
+					}
 				}
-				if(My_Model_User::genPassword($this->getRequest('password')) !== $user[0]['password']) {
+				if($ver != 'new' && My_Model_User::genPassword($this->getRequest('password')) !== $user[0]['password']) {
 					throw new Exception('密码不正确');
 				}
 				$this->_doLogin($user);
@@ -83,6 +102,18 @@ class My_Action_Game extends My_Action_Abstract {
 			$retData['code'] = 0;
 			$retData['msg'] = $e->getMessage();
 		}
+		$this->setViewParams('data', $retData);
+	}
+
+	public function logoutAction() {
+		$retData = array(
+				'code' => 1,
+				'msg' => '退出成功',
+				);
+		$this->setSession(array());
+		session_unset();
+		session_destroy();
+		setcookie('usid', null, -1);
 		$this->setViewParams('data', $retData);
 	}
 
@@ -256,11 +287,6 @@ class My_Action_Game extends My_Action_Abstract {
 		$this->setViewParams('data', $retData);
 	}
 
-	public function logoutAction() {
-		$this->setSession(array());
-		session_unset();
-		session_destroy();
-	}
 
 	public function infoAction() {
 		$retData = array(
@@ -668,7 +694,7 @@ class My_Action_Game extends My_Action_Abstract {
 	}
 
 	protected function _preAction() {
-		$unauthActions = array('prize','gameConf', 'top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic');
+		$unauthActions = array('prize','gameConf', 'top', 'isLogin','login', 'reg', 'callback', 'connect', 'auth', 'unauth', 'pv', 'topic', 'logout');
 		if(!in_array($this->getActionName(), $unauthActions)) {
 			$session = $this->getSession('auth');
 			if(!isset($session['user']) || empty($session['user'][0]['id'])) {

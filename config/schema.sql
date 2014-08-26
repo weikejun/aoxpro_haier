@@ -18,7 +18,7 @@ CREATE TABLE `user` (
   `login_time` bigint NOT NULL DEFAULT '0' COMMENT '登录时间',
   `create_time` bigint NOT NULL DEFAULT '0' COMMENT '注册时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `weibo_id_idx` (`weibo_id`),
+  KEY `weibo_id_idx` (`weibo_id`),
   UNIQUE KEY `name_idx` (`name`),
   KEY `create_time_idx` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户信息表'; 

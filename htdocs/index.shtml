@@ -15,7 +15,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style type="text/css" media="screen">
 		html, body { height:100%; background-color: #000000;}
-		body { margin:0; padding:0; overflow:hidden; }
+		body { margin:0; padding:0; }
 		#flashContent { width:100%; height:100%; }
 		</style>
 	<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=940908147" type="text/javascript" charset="utf-8"></script>
@@ -124,6 +124,7 @@ function share_FN(I,level){
 	</form>
 </div>
 -->
+<div class="main_content" style="height: 560px;">
 <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
 			id="main" width="100%" height="100%"
 			codebase="http://fpdownload.macromedia.com/get/flashplayer/current/swflash.cab">
@@ -200,6 +201,7 @@ function share_FN(I,level){
             <!--</td>
 	      </tr>
     </table>-->
+    </div>
 	<!-- START footer -->
 		<!--#include file="/cn/public/public_footer/nf_inc_footer.shtml"-->
 		<!--#include file="/cn/public/public_style/temp_head.shtml"-->
